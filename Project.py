@@ -1,14 +1,15 @@
 import os, pygame
 
-WIDTH , HEIGHT = 1280 , 720                                                     #Window Size
+WIDTH , HEIGHT = 833.5 , 480                                                    #Window Size
 COLOR = (255 , 255 , 255)                                                       #Window Color
 WIN = pygame.display.set_mode((WIDTH , HEIGHT))
 pygame.display.set_caption("Ping-Pong")
 FPS = 60                                                                        #Frames Per Second
-VEL = 2                                                                         #Velocity       
+VEL = 5                                                                         #Velocity       
 ELE_HEIGHT = 100                                                                #Element Height
 ELE_WIDTH = 100                                                                 #Element Width
 
+BORDER = pygame.Rect(WIDTH / 2 - 40, 0 , 0 , HEIGHT)                            #Border
 BG_IMAGE = pygame.image.load(                                                   #Background Image
     os.path.join("Game/Ping-Pong/Assets", "bg.png"))
 BG = pygame.transform.scale(BG_IMAGE , (WIDTH , HEIGHT))                                   
@@ -34,16 +35,16 @@ def window_color(red, blue):
 
 def red_bar_movement(keys_pressed_red, red):
         keys_pressed_red = pygame.key.get_pressed()                             #Red Bar Movement
-        if keys_pressed_red[pygame.K_w]:                                        #Red Bar Up
+        if keys_pressed_red[pygame.K_w] and red.y - VEL > 0:                    #Red Bar Up
             red.y -= VEL
-        elif keys_pressed_red[pygame.K_s]:                                      #Red Bar Down
+        elif keys_pressed_red[pygame.K_s] and red.y + VEL < BORDER.x:           #Red Bar Down
             red.y += VEL  
 
 def blue_bar_movement(keys_pressed_blue, blue):
         keys_pressed_blue = pygame.key.get_pressed()                            #Blue Bar Movement
-        if keys_pressed_blue[pygame.K_UP]:                                      #Blue Bar Up
+        if keys_pressed_blue[pygame.K_UP] and blue.y - VEL > 0:                 #Blue Bar Up
             blue.y -= VEL
-        elif keys_pressed_blue[pygame.K_DOWN]:                                  #Blue Bar Down
+        elif keys_pressed_blue[pygame.K_DOWN] and blue.y + VEL < BORDER.x:      #Blue Bar Down
             blue.y += VEL
 
 def ball_movement(ball):
@@ -51,11 +52,12 @@ def ball_movement(ball):
     ball.y += VEL                                               
 
 def main():
-    red = pygame.Rect(50 , 300 , ELE_WIDTH , ELE_HEIGHT)                            
-    blue = pygame.Rect(1150 , 300 , ELE_WIDTH , ELE_HEIGHT)
-    clock = pygame.time.Clock()                                                 #Clock
+    red = pygame.Rect(0 , 300 , ELE_WIDTH , ELE_HEIGHT)                            
+    blue = pygame.Rect(740, 300 , ELE_WIDTH , ELE_HEIGHT)
+    clock = pygame.time.Clock()                                                  #Clock
     run = True
     while run:
+        clock.tick(FPS)                                                          #FPS
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
